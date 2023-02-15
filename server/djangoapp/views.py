@@ -75,7 +75,7 @@ def registration_request(request):
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
     if request.method == "GET":
-        url = "https://9bb390cb.eu-gb.apigw.appdomain.cloud/api/dealership"
+        url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/1d5c972b-0e27-4930-b58d-620c7e24f2fb/dealership-package/get-review"
         # Get dealers from the URL
         context = {"dealerships": restapis.get_dealers_from_cf(url)}
         # Concat all dealer's short name
@@ -88,7 +88,7 @@ def get_dealerships(request):
 def get_dealer_details(request, dealer_id):
     context = {}
     if request.method == "GET":
-        url = 'https://9bb390cb.eu-gb.apigw.appdomain.cloud/api/review'
+        url = 'https://eu-gb.functions.appdomain.cloud/api/v1/web/1d5c972b-0e27-4930-b58d-620c7e24f2fb/dealership-package/get-review'
         context = {"reviews":  restapis.get_dealer_reviews_by_id_from_cf(url, dealer_id)}
         return render(request, 'djangoapp/dealer_details.html', context)
 
@@ -96,7 +96,7 @@ def get_dealer_details(request, dealer_id):
 def add_review(request, dealer_id):
     if request.method == "GET":
         dealersid = dealer_id
-        url = "https://9bb390cb.eu-gb.apigw.appdomain.cloud/api/dealership?dealerId={0}".format(dealersid)
+        url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/1d5c972b-0e27-4930-b58d-620c7e24f2fb/dealership-package/post-review?dealerId={0}".format(dealersid)
         # Get dealers from the URL
         context = {
             "cars": models.CarModel.objects.all(),
@@ -119,7 +119,7 @@ def add_review(request, dealer_id):
                 review["car_model"] = car.name
                 review["car_year"]= car.year.strftime("%Y")
             json_payload = {"review": review}
-            url = "https://9bb390cb.eu-gb.apigw.appdomain.cloud/api/review/"
+            url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/1d5c972b-0e27-4930-b58d-620c7e24f2fb/dealership-package/post-review/"
             restapis.post_request(url, json_payload, dealerId=dealer_id)
             return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
         else:
